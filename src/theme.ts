@@ -1,5 +1,13 @@
-import { extendTheme, defineStyle, defineStyleConfig } from "@chakra-ui/react";
+import {
+  extendTheme,
+  defineStyle,
+  defineStyleConfig,
+  createMultiStyleConfigHelpers,
+} from "@chakra-ui/react";
+import { inputAnatomy } from "@chakra-ui/anatomy";
 
+const { definePartsStyle, defineMultiStyleConfig } =
+  createMultiStyleConfigHelpers(inputAnatomy.keys);
 const linkNavVariant = defineStyle({
   bg: "brand.evergreen",
   color: "white",
@@ -110,6 +118,33 @@ const containerTheme = defineStyleConfig({
   },
 });
 
+const inputTheme = defineMultiStyleConfig({
+  baseStyle: definePartsStyle({
+    field: {
+      _focusVisible: {
+        borderColor: "brand.evergreen",
+        boxShadow: "0 0 0 1px var(--chakra-colors-brand-evergreen)",
+      },
+    },
+  }),
+});
+
+const textareaTheme = defineStyleConfig({
+  baseStyle: {
+    _focusVisible: {
+      borderColor: "brand.evergreen",
+      boxShadow: "0 0 0 1px var(--chakra-colors-brand-evergreen)",
+    },
+  },
+});
+
+const tabsTheme = defineStyleConfig({
+  defaultProps: {
+    variant: "enclosed",
+    colorScheme: "pink",
+  },
+});
+
 export const theme = extendTheme({
   fonts: {
     heading: "var(--font-princess), cursive",
@@ -158,6 +193,15 @@ export const theme = extendTheme({
     main: {
       py: { base: 3, md: 4 },
     },
+    // NEW: reusable panel style for Admin containers
+    panel: {
+      bg: "whiteAlpha.900",
+      border: "1px solid",
+      borderColor: "brand.evergreen",
+      borderRadius: "lg",
+      boxShadow: "0 6px 14px rgba(47,93,58,0.18)",
+      p: { base: 4, md: 6 },
+    },
   },
   components: {
     Link: linkTheme,
@@ -166,6 +210,10 @@ export const theme = extendTheme({
     Heading: headingTheme,
     Text: textTheme,
     Container: containerTheme,
+    // NEW
+    Input: inputTheme,
+    Textarea: textareaTheme,
+    Tabs: tabsTheme,
   },
   colors: {
     brand: {
