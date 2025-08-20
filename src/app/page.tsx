@@ -1,8 +1,9 @@
+import { MainTemplate } from "@/templates/MainTemplate";
 import { Box, Container, Heading, Text } from "@chakra-ui/react";
 
 export default function Home() {
   return (
-    <main>
+    <MainTemplate>
       <Box as="section" id="about" py={10} textAlign="center">
         <Heading
           as="h2"
@@ -33,6 +34,6 @@ export default function Home() {
           </Text>
         </Container>
       </Box>
-    </main>
+    </MainTemplate>
   );
 }
