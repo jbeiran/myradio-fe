@@ -1,7 +1,17 @@
 "use client";
 
 import NextLink from "next/link";
-import { HStack, Link } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  HStack,
+  Link,
+  IconButton,
+  Stack,
+  Collapse,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { usePathname } from "next/navigation";
 
 const links = [
@@ -14,58 +24,60 @@ const links = [
 
 export default function Nav() {
   const pathname = usePathname();
+  const { isOpen, onToggle } = useDisclosure();
+
+  const renderLink = (l: { href: string; label: string }, mobile = false) => {
+    const active =
+      l.href === "/" ? pathname === "/" : pathname?.startsWith(l.href);
+    return (
+      <Link
+        as={NextLink}
+        key={l.href}
+        href={l.href}
+        aria-current={active ? "page" : undefined}
+        variant="nav"
+        w={mobile ? "full" : "auto"}
+      >
+        {l.label}
+      </Link>
+    );
+  };
+
   return (
-    <HStack as="nav" justify="center" spacing={3} mt={5} mb={2}>
-      {links.map((l) => {
-        const active =
-          l.href === "/" ? pathname === "/" : pathname?.startsWith(l.href);
-        return (
-          <Link
-            as={NextLink}
-            key={l.href}
-            href={l.href}
-            bg={active ? "brand.roseDust" : "brand.evergreen"}
-            color="white"
-            px={5}
-            py={2.5}
-            fontWeight="bold"
-            textDecoration="none"
-            border="2px solid"
-            borderColor="white"
-            borderBottomColor="brand.evergreen"
-            borderRightColor="brand.evergreen"
-            boxShadow="0 6px 14px rgba(47,93,58,0.35), inset 0 2px 0 rgba(255,255,255,0.6), inset 0 -2px 0 rgba(0,0,0,0.12)"
-            position="relative"
-            _hover={{
-              bg: "brand.mustardVintage",
-              color: "brand.evergreen",
-              transform: "translateY(-1px) scale(1.05)",
-              boxShadow:
-                "0 10px 18px rgba(47,93,58,0.4), inset 0 2px 0 rgba(255,255,255,0.7)",
-            }}
-            _active={{
-              transform: "translateY(1px) scale(0.98)",
-              boxShadow:
-                "0 3px 8px rgba(47,93,58,0.3), inset 0 2px 4px rgba(0,0,0,0.2)",
-            }}
-            sx={{
-              "&::after": {
-                content: '""',
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                height: "50%",
-                pointerEvents: "none",
-                background:
-                  "linear-gradient(to bottom, rgba(255,255,255,0.6), rgba(255,255,255,0.05))",
-              },
-            }}
+    <Box as="nav" mt={5} mb={2}>
+      <Container>
+        <Box display={{ base: "block", md: "none" }} textAlign="center">
+          <IconButton
+            onClick={onToggle}
+            variant="navToggle"
+            aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
+            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+            size="md"
+          />
+        </Box>
+
+        <Collapse in={isOpen} animateOpacity>
+          <Stack
+            display={{ base: "flex", md: "none" }}
+            spacing={2}
+            mt={3}
+            w="full"
+            align="stretch"
           >
-            {l.label}
-          </Link>
-        );
-      })}
-    </HStack>
+            {links.map((l) => renderLink(l, true))}
+          </Stack>
+        </Collapse>
+
+        <HStack
+          justify="center"
+          spacing={3}
+          mt={{ base: 3, md: 5 }}
+          mb={2}
+          display={{ base: "none", md: "flex" }}
+        >
+          {links.map((l) => renderLink(l))}
+        </HStack>
+      </Container>
+    </Box>
   );
 }

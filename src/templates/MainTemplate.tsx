@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Container, Flex } from "@chakra-ui/react";
 import React from "react";
 
 import Header from "@/components/NavBar/Header";
@@ -13,8 +13,8 @@ export const MainTemplate = (props: MainTemplateProps) => {
     <Flex direction="column" minH="100vh">
       <Header />
       <Nav />
-      <Box as="main" flex="1" pt="5px">
-        {children}
+      <Box as="main" flex="1" layerStyle="main">
+        <Container>{children}</Container>
       </Box>
       <Footer />
     </Flex>
