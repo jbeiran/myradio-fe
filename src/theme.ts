@@ -24,8 +24,7 @@ const linkNavVariant = defineStyle({
   },
   _active: {
     transform: "translateY(1px) scale(0.98)",
-    boxShadow:
-      "0 3px 8px rgba(47,93,58,0.3), inset 0 2px 4px rgba(0,0,0,0.2)",
+    boxShadow: "0 3px 8px rgba(47,93,58,0.3), inset 0 2px 4px rgba(0,0,0,0.2)",
   },
   "&::after": {
     content: '""',
@@ -44,12 +43,23 @@ const linkNavVariant = defineStyle({
 });
 
 const linkTheme = defineStyleConfig({
+  baseStyle: {
+    cursor: 'url("/assets/cursors/link.cur"), pointer',
+    _hover: { cursor: 'url("/assets/cursors/pen.cur"), pointer' },
+    _active: { cursor: 'url("/assets/cursors/pen.cur"), pointer' },
+  },
   variants: {
     nav: linkNavVariant,
   },
 });
 
 const iconButtonTheme = defineStyleConfig({
+  baseStyle: {
+    cursor: 'url("/assets/cursors/link.cur"), pointer',
+    _hover: { cursor: 'url("/assets/cursors/pen.cur"), pointer' },
+    _active: { cursor: 'url("/assets/cursors/pen.cur"), pointer' },
+    _disabled: { cursor: 'url("/assets/cursors/unavail.cur"), not-allowed' },
+  },
   variants: {
     navToggle: defineStyle({
       borderWidth: "1px",
@@ -57,6 +67,15 @@ const iconButtonTheme = defineStyleConfig({
       color: "brand.evergreen",
       _hover: { bg: "brand.creamSweater" },
     }),
+  },
+});
+
+const buttonTheme = defineStyleConfig({
+  baseStyle: {
+    cursor: 'url("/assets/cursors/link.cur"), pointer',
+    _hover: { cursor: 'url("/assets/cursors/pen.cur"), pointer' },
+    _active: { cursor: 'url("/assets/cursors/pen.cur"), pointer' },
+    _disabled: { cursor: 'url("/assets/cursors/unavail.cur"), not-allowed' },
   },
 });
 
@@ -106,6 +125,7 @@ export const theme = extendTheme({
         overflowX: "hidden",
         display: "flex",
         flexDirection: "column",
+        cursor: 'url("/assets/cursors/arrow.cur"), auto',
       },
       main: { flex: "1 0 auto" },
     },
@@ -137,6 +157,7 @@ export const theme = extendTheme({
   },
   components: {
     Link: linkTheme,
+    Button: buttonTheme,
     IconButton: iconButtonTheme,
     Heading: headingTheme,
     Text: textTheme,
