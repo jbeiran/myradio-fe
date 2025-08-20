@@ -113,19 +113,23 @@ const containerTheme = defineStyleConfig({
 export const theme = extendTheme({
   fonts: {
     heading: "var(--font-princess), cursive",
-    body: "var(--font-princess), cursive",
+    body: "var(--font-garamond), serif",
   },
   styles: {
     global: {
       html: { scrollBehavior: "smooth" },
       body: {
         bg: "brand.creamSweater",
+        backgroundImage: 'url("/assets/images/background.png")',
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
         color: "brand.slateGray",
         minHeight: "100vh",
         overflowX: "hidden",
         display: "flex",
         flexDirection: "column",
-        cursor: 'url("/assets/cursors/arrow.cur"), auto',
+        cursor: 'url("/assets/cursors/link.cur"), pointer',
       },
       main: { flex: "1 0 auto" },
     },
