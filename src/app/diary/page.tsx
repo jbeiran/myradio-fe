@@ -12,10 +12,19 @@ import {
 import { DiaryCard, type DiaryItem } from "@/components/DiaryCard";
 import { usePaginatedList } from "@/hooks/usePaginatedList";
 import { Pagination } from "@/components/Pagination";
+import FilterBar from "@/components/FilterBar";
 
 export default function DiaryListPage() {
-  const { items, loading, error, page, totalPages, goTo } =
-    usePaginatedList<DiaryItem>("diary", { limit: 5 });
+  const {
+    items,
+    loading,
+    error,
+    page,
+    totalPages,
+    goTo,
+    filters,
+    applyFilters,
+  } = usePaginatedList<DiaryItem>("diary", { limit: 5 });
 
   return (
     <MainTemplate>
@@ -30,8 +39,35 @@ export default function DiaryListPage() {
           Diario
         </Heading>
         <Text textAlign="center" color="brand.slateGray" mb={6}>
-          Notas, pensamientos y lecturas, con aroma otoñal 🍂📖
+          Notas, pensamientos y lecturas, con aroma otoñal
         </Text>
+
+        <FilterBar
+          fields={[
+            {
+              name: "title",
+              label: "Título",
+              type: "text",
+              placeholder: "Buscar por título",
+            },
+            {
+              name: "tags",
+              label: "Tags",
+              type: "text",
+              placeholder: "tag1, tag2",
+            },
+            { name: "from", label: "Desde", type: "date" },
+            { name: "to", label: "Hasta", type: "date" },
+          ]}
+          initialValues={{
+            title: String(filters.title || ""),
+            tags: String(filters.tags || ""),
+            from: String(filters.from || ""),
+            to: String(filters.to || ""),
+          }}
+          onSearch={(next) => applyFilters(next)}
+          onClear={() => applyFilters({})}
+        />
 
         {loading && (
           <HStack justify="center" py={10}>

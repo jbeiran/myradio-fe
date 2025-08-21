@@ -14,15 +14,38 @@ export async function GET(req: Request) {
   );
   const skip = (page - 1) * limit;
 
+  const filter: any = {};
+  const title = (searchParams.get("title") || "").trim();
+  const tags = (searchParams.get("tags") || "").trim();
+  const from = (searchParams.get("from") || "").trim();
+  const to = (searchParams.get("to") || "").trim();
+
+  if (title) filter.title = { $regex: title, $options: "i" };
+  if (tags) filter.tags = { $regex: tags, $options: "i" };
+
+  if (from || to) {
+    const dateRange: any = {};
+    if (from) {
+      const d = new Date(from);
+      if (!Number.isNaN(d.getTime())) dateRange.$gte = d;
+    }
+    if (to) {
+      const d = new Date(to);
+      if (!Number.isNaN(d.getTime())) dateRange.$lte = d;
+    }
+    if (Object.keys(dateRange).length) {
+      filter.date = dateRange;
+    }
+  }
+
   const db = await getDb();
   const coll = db.collection(process.env.COLLECTION_DIARY!);
 
-  const total = await coll.countDocuments({});
+  const total = await coll.countDocuments(filter);
   const itemsRaw = await coll
-    .find(
-      {},
-      { projection: { title: 1, content: 1, tags: 1, date: 1, createdAt: 1 } }
-    )
+    .find(filter, {
+      projection: { title: 1, content: 1, tags: 1, date: 1, createdAt: 1 },
+    })
     .sort({ date: -1, createdAt: -1 })
     .skip(skip)
     .limit(limit)

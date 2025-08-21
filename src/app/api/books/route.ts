@@ -14,25 +14,53 @@ export async function GET(req: Request) {
   );
   const skip = (page - 1) * limit;
 
+  const filter: any = {};
+  const title = (searchParams.get("title") || "").trim();
+  const author = (searchParams.get("author") || "").trim();
+  const gender = (searchParams.get("gender") || "").trim();
+  const from = (searchParams.get("from") || "").trim();
+  const to = (searchParams.get("to") || "").trim();
+  const minRating = Number(searchParams.get("minRating") || "");
+
+  if (title) filter.title = { $regex: title, $options: "i" };
+  if (author) filter.author = { $regex: author, $options: "i" };
+  if (gender) filter.gender = { $regex: gender, $options: "i" };
+
+  if (!Number.isNaN(minRating) && minRating > 0) {
+    filter.rating = { $gte: minRating };
+  }
+
+  if (from || to) {
+    const dateRange: any = {};
+    if (from) {
+      const d = new Date(from);
+      if (!Number.isNaN(d.getTime())) dateRange.$gte = d;
+    }
+    if (to) {
+      const d = new Date(to);
+      if (!Number.isNaN(d.getTime())) dateRange.$lte = d;
+    }
+    if (Object.keys(dateRange).length) {
+      filter.date = dateRange;
+    }
+  }
+
   const db = await getDb();
   const coll = db.collection(process.env.COLLECTION_BOOKS!);
 
-  const total = await coll.countDocuments({});
+  const total = await coll.countDocuments(filter);
   const itemsRaw = await coll
-    .find(
-      {},
-      {
-        projection: {
-          title: 1,
-          author: 1,
-          rating: 1,
-          review: 1,
-          date: 1,
-          gender: 1,
-          createdAt: 1,
-        },
-      }
-    )
+    .find(filter, {
+      projection: {
+        title: 1,
+        author: 1,
+        rating: 1,
+        review: 1,
+        date: 1,
+        gender: 1,
+        createdAt: 1,
+      },
+    })
     .sort({ date: -1, createdAt: -1 })
     .skip(skip)
     .limit(limit)
