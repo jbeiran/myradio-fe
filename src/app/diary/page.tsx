@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { MainTemplate } from "@/templates/MainTemplate";
 import {
   Box,
