@@ -29,7 +29,21 @@ function formatDate(input?: string | null) {
   }).format(d);
 }
 
-export function DiaryCard({ item }: { item: DiaryItem }) {
+const paperImages = [
+  "/assets/images/sticker-papers/paper1.png",
+  "/assets/images/sticker-papers/paper2.png",
+  "/assets/images/sticker-papers/paper3.png",
+  "/assets/images/sticker-papers/paper4.png",
+];
+const paperBgColors = ["#e9e0cf", "#ead8b9", "#cbb69d", "#e8dcc6"];
+
+export function DiaryCard({
+  item,
+  paperIndex = 0,
+}: {
+  item: DiaryItem;
+  paperIndex?: number;
+}) {
   const excerptMax = 220;
   const excerpt =
     item.content.length > excerptMax
@@ -43,11 +57,17 @@ export function DiaryCard({ item }: { item: DiaryItem }) {
       .filter(Boolean) || [];
 
   const dateLabel = formatDate(item.date || item.createdAt);
+  const bgPaper = paperImages[Math.abs(paperIndex) % paperImages.length];
+  const bgColor = paperBgColors[Math.abs(paperIndex) % paperBgColors.length];
 
   return (
     <Box
       position="relative"
-      bg="whiteAlpha.900"
+      bgImage={`url('${bgPaper}')`}
+      backgroundRepeat="no-repeat"
+      backgroundSize={{ base: "145% 145%", md: "135% 135%" }}
+      backgroundPosition="center"
+      backgroundColor={bgColor}
       border="2px dashed"
       borderColor="brand.caramel"
       boxShadow="0 6px 14px rgba(47,93,58,0.18)"
@@ -60,6 +80,8 @@ export function DiaryCard({ item }: { item: DiaryItem }) {
       display="flex"
       flexDirection="column"
       minHeight="250px"
+      borderRadius="md"
+      overflow="hidden"
     >
       <Flex align="baseline" mb={5} gap={3}>
         <Text fontSize="sm" color="brand.slateGray">

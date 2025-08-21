@@ -87,8 +87,8 @@ function DiaryList() {
       {!loading && !error && (
         <>
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-            {items.map((it) => (
-              <DiaryCard key={it._id} item={it} />
+            {items.map((it, idx) => (
+              <DiaryCard key={it._id} item={it} paperIndex={idx % 4} />
             ))}
           </SimpleGrid>
 
