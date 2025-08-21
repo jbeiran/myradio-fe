@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { title, author, rating, review, date = null } = await req.json();
+  const { title, author, rating, review, date = null, gender = "" } = await req.json();
   if (!title || !author || !rating || !review) {
     return NextResponse.json({ error: "Faltan campos" }, { status: 400 });
   }
@@ -23,6 +23,7 @@ export async function POST(req: Request) {
     rating,
     review,
     date,
+    gender,
     createdAt: new Date(),
   });
 

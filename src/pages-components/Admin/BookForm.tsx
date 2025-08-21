@@ -15,7 +15,7 @@ import {
   Box,
   useToast,
 } from "@chakra-ui/react";
-import StarRating from "./StarRating";
+import IconRating from "./IconRating";
 
 const BookSchema = Yup.object({
   title: Yup.string().required("Título requerido").max(160),
@@ -23,6 +23,7 @@ const BookSchema = Yup.object({
   rating: Yup.number().min(1).max(5).required("Rating requerido"),
   review: Yup.string().required("Reseña requerida").min(10),
   date: Yup.string().nullable(),
+  gender: Yup.string(),
 });
 
 export default function BookForm() {
@@ -37,6 +38,7 @@ export default function BookForm() {
         rating: 3,
         review: "",
         date: "",
+        gender: "",
       }}
       validationSchema={BookSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -82,11 +84,19 @@ export default function BookForm() {
               )}
             </Field>
 
-            <Stack direction={{ base: "column", md: "row" }} spacing={4} align="start">
+            <Stack
+              direction={{ base: "column", md: "row" }}
+              spacing={4}
+              align="start"
+            >
               <Box w={{ base: "100%", md: "35%" }}>
                 <FormControl isInvalid={!!errors.rating && !!touched.rating}>
                   <FormLabel>Rating</FormLabel>
-                  <StarRating value={values.rating} onChange={(n) => setFieldValue("rating", n)} />
+                  <IconRating
+                    variant="book"
+                    value={values.rating}
+                    onChange={(n: number) => setFieldValue("rating", n)}
+                  />
                   <FormErrorMessage>{errors.rating as any}</FormErrorMessage>
                 </FormControl>
               </Box>
@@ -114,7 +124,22 @@ export default function BookForm() {
               )}
             </Field>
 
-            <Button type="submit" colorScheme="pink" isLoading={isSubmitting} alignSelf={{ base: "stretch", md: "flex-end" }}>
+            <Field name="gender">
+              {({ field }: any) => (
+                <FormControl isInvalid={!!errors.gender && !!touched.gender}>
+                  <FormLabel htmlFor="gender">Género</FormLabel>
+                  <Input id="gender" {...field} bg={fieldBg} />
+                  <FormErrorMessage>{errors.gender}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+
+            <Button
+              type="submit"
+              colorScheme="pink"
+              isLoading={isSubmitting}
+              alignSelf={{ base: "stretch", md: "flex-end" }}
+            >
               Publicar
             </Button>
           </VStack>

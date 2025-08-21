@@ -17,6 +17,7 @@ export async function POST(req: Request) {
     rating,
     review,
     date = null,
+    gender = "",
   } = await req.json();
   if (!title || !rating || !review) {
     return NextResponse.json({ error: "Faltan campos" }, { status: 400 });
@@ -29,6 +30,7 @@ export async function POST(req: Request) {
     rating,
     review,
     date,
+    gender,
     createdAt: new Date(),
   });
 

@@ -15,13 +15,14 @@ import {
   Box,
   useToast,
 } from "@chakra-ui/react";
-import StarRating from "./StarRating";
+import IconRating from "./IconRating";
 
 const MovieSchema = Yup.object({
   title: Yup.string().required("Título requerido").max(160),
   director: Yup.string().max(120),
   rating: Yup.number().min(1).max(5).required("Rating requerido"),
   review: Yup.string().required("Reseña requerida").min(10),
+  gender: Yup.string(),
   date: Yup.string().nullable(),
 });
 
@@ -37,6 +38,7 @@ export default function MovieForm() {
         rating: 3,
         review: "",
         date: "",
+        gender: "",
       }}
       validationSchema={MovieSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -99,9 +101,9 @@ export default function MovieForm() {
               <Box w={{ base: "100%", md: "35%" }}>
                 <FormControl isInvalid={!!errors.rating && !!touched.rating}>
                   <FormLabel>Rating</FormLabel>
-                  <StarRating
+                  <IconRating
                     value={values.rating}
-                    onChange={(n) => setFieldValue("rating", n)}
+                    onChange={(n: number) => setFieldValue("rating", n)}
                   />
                   <FormErrorMessage>{errors.rating as any}</FormErrorMessage>
                 </FormControl>
@@ -126,6 +128,16 @@ export default function MovieForm() {
                   <FormLabel htmlFor="review">Reseña</FormLabel>
                   <Textarea id="review" rows={8} {...field} bg={fieldBg} />
                   <FormErrorMessage>{errors.review}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+
+            <Field name="gender">
+              {({ field }: any) => (
+                <FormControl isInvalid={!!errors.gender && !!touched.gender}>
+                  <FormLabel htmlFor="gender">Género</FormLabel>
+                  <Input id="gender" {...field} bg={fieldBg} />
+                  <FormErrorMessage>{errors.gender}</FormErrorMessage>
                 </FormControl>
               )}
             </Field>

@@ -16,7 +16,7 @@ import { usePathname } from "next/navigation";
 
 const links = [
   { href: "/", label: "Así soy" },
-  { href: "/blog", label: "Mi Diario" },
+  { href: "/diary", label: "Mi Diario" },
   { href: "/gallery", label: "Fotitos" },
   { href: "/books", label: "Libros" },
   { href: "/movies", label: "Pelis" },
