@@ -35,7 +35,7 @@ const paperImages = [
   "/assets/images/sticker-papers/paper3.png",
   "/assets/images/sticker-papers/paper4.png",
 ];
-const paperBgColors = ["#e9e0cf", "#ead8b9", "#cbb69d", "#e8dcc6"];
+const paperBgColors = ["#e9e0cf", "#ead8b9", "#B59579", "#e8dcc6"];
 
 export function DiaryCard({
   item,
@@ -83,13 +83,20 @@ export function DiaryCard({
       borderRadius="md"
       overflow="hidden"
     >
-      <Flex align="baseline" mb={5} gap={3}>
-        <Text fontSize="sm" color="brand.slateGray">
+      <Flex align="baseline" mb={4} gap={3}>
+        <Text fontSize="sm" color="brand.slateGray" fontWeight="bold">
           {dateLabel}
         </Text>
       </Flex>
 
-      <Heading size="lg" color="brand.evergreen" textShadow="1px 1px #f0e2cf">
+      <Heading
+        size="xl"
+        fontWeight="extrabold"
+        color="brand.evergreen"
+        letterSpacing="0.2px"
+        lineHeight="1.2"
+        fontFamily=""
+      >
         <Link
           as={NextLink}
           href={`/diary/${item._id}`}
@@ -99,13 +106,31 @@ export function DiaryCard({
         </Link>
       </Heading>
 
-      <Text mt={3} color="brand.slateGray" flex="1">
+      <Text
+        mt={3}
+        color="black"
+        lineHeight="1.8"
+        flex="1"
+        fontSize="lg"
+        fontWeight="medium"
+        textShadow="0 1px 2px rgba(255,255,255,0.8)"
+      >
         {excerpt}
       </Text>
 
       <HStack mt={4} spacing={2} flexWrap="wrap">
         {tags.map((t) => (
-          <Badge key={t} colorScheme="pink" variant="solid">
+          <Badge
+            key={t}
+            bg="brand.evergreen"
+            color="white"
+            px={3}
+            py={1}
+            borderRadius="full"
+            fontSize="xs"
+            fontWeight="bold"
+            textShadow="0 1px 1px rgba(0,0,0,0.2)"
+          >
             #{t}
           </Badge>
         ))}
@@ -116,8 +141,11 @@ export function DiaryCard({
         href={`/diary/${item._id}`}
         mt={4}
         display="inline-block"
-        color="brand.caramel"
+        color="brand.evergreen"
         fontWeight="bold"
+        fontSize="md"
+        textShadow="0 1px 2px rgba(255,255,255,0.7)"
+        _hover={{ color: "brand.caramel", textDecoration: "underline" }}
       >
         Leer más →
       </Link>
