@@ -193,7 +193,6 @@ export const theme = extendTheme({
     main: {
       py: { base: 3, md: 4 },
     },
-    // NEW: reusable panel style for Admin containers
     panel: {
       bg: "whiteAlpha.900",
       border: "1px solid",
@@ -210,7 +209,6 @@ export const theme = extendTheme({
     Heading: headingTheme,
     Text: textTheme,
     Container: containerTheme,
-    // NEW
     Input: inputTheme,
     Textarea: textareaTheme,
     Tabs: tabsTheme,
