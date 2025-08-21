@@ -197,7 +197,6 @@ export const theme = extendTheme({
       bg: "whiteAlpha.900",
       border: "1px solid",
       borderColor: "brand.evergreen",
-      borderRadius: "lg",
       boxShadow: "0 6px 14px rgba(47,93,58,0.18)",
       p: { base: 4, md: 6 },
     },

@@ -15,7 +15,7 @@ export async function GET(req: Request) {
   const skip = (page - 1) * limit;
 
   const db = await getDb();
-  const coll = db.collection(process.env.COLLECTION_MOVIES!);
+  const coll = db.collection(process.env.COLLECTION_BOOKS!);
 
   const total = await coll.countDocuments({});
   const itemsRaw = await coll

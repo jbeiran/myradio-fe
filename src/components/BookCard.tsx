@@ -1,20 +1,15 @@
 import NextLink from "next/link";
-import {
-  Box,
-  Heading,
-  Text,
-  HStack,
-  Badge,
-  Link,
-  Flex,
-} from "@chakra-ui/react";
+import { Box, Heading, Text, Badge, Link, Flex } from "@chakra-ui/react";
+import IconRating from "@/pages-components/Admin/IconRating";
 
-export type DiaryItem = {
+export type BookItem = {
   _id: string;
   title: string;
-  content: string;
-  tags?: string;
+  author: string;
+  rating: number;
+  review: string;
   date?: string | null;
+  gender?: string;
   createdAt?: string | null;
 };
 
@@ -29,18 +24,12 @@ function formatDate(input?: string | null) {
   }).format(d);
 }
 
-export function DiaryCard({ item }: { item: DiaryItem }) {
+export function BookCard({ item }: { item: BookItem }) {
   const excerptMax = 220;
   const excerpt =
-    item.content.length > excerptMax
-      ? item.content.slice(0, excerptMax).trim() + "…"
-      : item.content;
-
-  const tags =
-    (item.tags || "")
-      .split(",")
-      .map((t) => t.trim())
-      .filter(Boolean) || [];
+    item.review.length > excerptMax
+      ? item.review.slice(0, excerptMax).trim() + "…"
+      : item.review;
 
   const dateLabel = formatDate(item.date || item.createdAt);
 
@@ -61,43 +50,52 @@ export function DiaryCard({ item }: { item: DiaryItem }) {
       flexDirection="column"
       minHeight="250px"
     >
-      <Flex align="baseline" mb={5} gap={3}>
+      <Flex align="center" justify="space-between" mb={3} gap={3}>
         <Text fontSize="sm" color="brand.slateGray">
           {dateLabel}
         </Text>
+        {item.gender ? (
+          <Badge colorScheme="pink" variant="solid">
+            {item.gender}
+          </Badge>
+        ) : null}
       </Flex>
 
       <Heading size="lg" color="brand.evergreen" textShadow="1px 1px #f0e2cf">
         <Link
           as={NextLink}
-          href={`/diary/${item._id}`}
+          href={`/books/${item._id}`}
           _hover={{ textDecoration: "none", color: "brand.mustardVintage" }}
         >
           {item.title}
         </Link>
       </Heading>
 
+      <Text mt={1} color="brand.slateGray" fontStyle="italic">
+        Autor: {item.author}
+      </Text>
+
+      <Box mt={3} pointerEvents="none">
+        <IconRating
+          value={Math.max(1, Math.min(5, item.rating || 1))}
+          onChange={() => {}}
+          variant="book"
+        />
+      </Box>
+
       <Text mt={3} color="brand.slateGray" flex="1">
         {excerpt}
       </Text>
 
-      <HStack mt={4} spacing={2} flexWrap="wrap">
-        {tags.map((t) => (
-          <Badge key={t} colorScheme="pink" variant="solid">
-            #{t}
-          </Badge>
-        ))}
-      </HStack>
-
       <Link
         as={NextLink}
-        href={`/diary/${item._id}`}
+        href={`/books/${item._id}`}
         mt={4}
         display="inline-block"
         color="brand.caramel"
         fontWeight="bold"
       >
-        Leer más →
+        Leer reseña →
       </Link>
     </Box>
   );
