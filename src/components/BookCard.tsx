@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 import { Box, Heading, Text, Badge, Link, Flex } from "@chakra-ui/react";
-import IconRating from "@/pages-components/Admin/IconRating";
+import IconRating from "@/components/IconRating";
 
 export type BookItem = {
   _id: string;

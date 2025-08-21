@@ -2,7 +2,6 @@
 
 import { MainTemplate } from "@/templates/MainTemplate";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import {
   Box,
   Heading,
@@ -12,21 +11,12 @@ import {
   Button,
   useDisclosure,
   Stack,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  FormControl,
-  FormLabel,
-  Input,
-  Textarea,
-  ModalFooter,
 } from "@chakra-ui/react";
-import IconRating from "@/pages-components/Admin/IconRating";
+import IconRating from "@/components/IconRating";
+import ModalForm from "@/components/ModalForm";
 import { useDetailResource } from "@/hooks/useDetailResource";
 import { formatDate } from "@/lib/date";
+import { MovieSchema } from "@/pages-components/Admin/validationSchemas";
 
 type MovieDetail = {
   _id: string;
@@ -53,23 +43,6 @@ export default function MovieDetailPage() {
   } = useDetailResource<MovieDetail>("movies", movieId);
 
   const editModal = useDisclosure();
-  const [title, setTitle] = useState("");
-  const [director, setDirector] = useState("");
-  const [review, setReview] = useState("");
-  const [gender, setGender] = useState("");
-  const [date, setDate] = useState("");
-  const [rating, setRating] = useState(1);
-
-  useEffect(() => {
-    if (item) {
-      setTitle(item.title);
-      setDirector(item.director || "");
-      setReview(item.review);
-      setGender(item.gender || "");
-      setDate(item.date ? new Date(item.date).toISOString().slice(0, 10) : "");
-      setRating(item.rating || 1);
-    }
-  }, [item]);
 
   const handleDelete = async () => {
     if (!isAdmin || !item) return;
@@ -79,24 +52,6 @@ export default function MovieDetailPage() {
       router.push("/movies");
     } else {
       alert("No se pudo eliminar");
-    }
-  };
-
-  const handleSave = async () => {
-    if (!isAdmin || !item) return;
-    const payload = {
-      title: title.trim(),
-      director: director.trim(),
-      review: review.trim(),
-      gender: gender.trim(),
-      date,
-      rating,
-    };
-    const ok = await save(payload);
-    if (ok) {
-      editModal.onClose();
-    } else {
-      alert("No se pudo guardar");
     }
   };
 
@@ -173,63 +128,42 @@ export default function MovieDetailPage() {
         )}
       </Box>
 
-      <Modal isOpen={editModal.isOpen} onClose={editModal.onClose} size="xl">
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Editar entrada</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl mb={3}>
-              <FormLabel>Título</FormLabel>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} />
-            </FormControl>
-            <FormControl mb={3}>
-              <FormLabel>Reseña</FormLabel>
-              <Textarea
-                rows={8}
-                value={review}
-                onChange={(e) => setReview(e.target.value)}
-              />
-            </FormControl>
-            <HStack>
-              <FormControl>
-                <FormLabel>Género</FormLabel>
-                <Input
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Fecha</FormLabel>
-                <Input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                />
-              </FormControl>
-            </HStack>
-            <FormControl mb={3}>
-              <FormLabel>Director</FormLabel>
-              <Input
-                value={director}
-                onChange={(e) => setDirector(e.target.value)}
-              />
-            </FormControl>
-            <FormControl mb={3}>
-              <FormLabel>Rating</FormLabel>
-              <IconRating value={rating} onChange={setRating} variant="star" />
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Button mr={3} onClick={editModal.onClose}>
-              Cancelar
-            </Button>
-            <Button colorScheme="pink" onClick={handleSave}>
-              Guardar
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <ModalForm
+        isOpen={editModal.isOpen}
+        onClose={editModal.onClose}
+        title="Editar entrada"
+        initialValues={{
+          title: item?.title || "",
+          director: item?.director || "",
+          review: item?.review || "",
+          gender: item?.gender || "",
+          date: item?.date
+            ? new Date(item.date).toISOString().slice(0, 10)
+            : "",
+          rating: Math.max(1, Math.min(5, item?.rating || 1)),
+        }}
+        fields={[
+          { name: "title", label: "Título", type: "text" },
+          { name: "review", label: "Reseña", type: "textarea", rows: 8 },
+          { name: "gender", label: "Género", type: "text" },
+          { name: "date", label: "Fecha", type: "date" },
+          { name: "director", label: "Director", type: "text" },
+          { name: "rating", label: "Rating", type: "rating", variant: "star" },
+        ]}
+        validationSchema={MovieSchema}
+        onSubmit={async (values) => {
+          if (!isAdmin || !item) return false;
+          const ok = await save({
+            title: values.title.trim(),
+            director: values.director.trim(),
+            review: values.review.trim(),
+            gender: values.gender.trim(),
+            date: values.date,
+            rating: values.rating,
+          });
+          return ok;
+        }}
+      />
     </MainTemplate>
   );
 }

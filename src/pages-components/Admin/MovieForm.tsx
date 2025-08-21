@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
 import {
   VStack,
   FormControl,
@@ -15,16 +14,8 @@ import {
   Box,
   useToast,
 } from "@chakra-ui/react";
-import IconRating from "./IconRating";
-
-const MovieSchema = Yup.object({
-  title: Yup.string().required("Título requerido").max(160),
-  director: Yup.string().max(120),
-  rating: Yup.number().min(1).max(5).required("Rating requerido"),
-  review: Yup.string().required("Reseña requerida").min(10),
-  gender: Yup.string(),
-  date: Yup.string().nullable(),
-});
+import IconRating from "@/components/IconRating";
+import { MovieSchema } from "./validationSchemas";
 
 export default function MovieForm() {
   const toast = useToast();

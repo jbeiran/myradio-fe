@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
 import {
   VStack,
   FormControl,
@@ -15,13 +14,7 @@ import {
   Box,
   useToast,
 } from "@chakra-ui/react";
-
-const DiarySchema = Yup.object({
-  title: Yup.string().required("Título requerido").max(120),
-  content: Yup.string().required("Contenido requerido").min(20),
-  tags: Yup.string().max(200),
-  date: Yup.string().nullable(),
-});
+import { DiarySchema } from "./validationSchemas";
 
 export default function DiaryForm() {
   const toast = useToast();
