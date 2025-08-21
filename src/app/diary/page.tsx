@@ -27,7 +27,7 @@ function DiaryList() {
     goTo,
     filters,
     applyFilters,
-  } = usePaginatedList<DiaryItem>("diary", { limit: 5 });
+  } = usePaginatedList<DiaryItem>("diary", { limit: 4 });
 
   return (
     <Box layerStyle="panel">
@@ -41,7 +41,7 @@ function DiaryList() {
         Diario
       </Heading>
       <Text textAlign="center" color="brand.slateGray" mb={6}>
-        Notas, pensamientos y lecturas, con aroma otoñal
+        People are particularly stupid today; I can't talk to any more of them.
       </Text>
 
       <FilterBar

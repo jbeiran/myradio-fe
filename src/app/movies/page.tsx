@@ -27,7 +27,7 @@ function MoviesList() {
     goTo,
     filters,
     applyFilters,
-  } = usePaginatedList<MovieItem>("movies", { limit: 5 });
+  } = usePaginatedList<MovieItem>("movies", { limit: 4 });
 
   return (
     <Box layerStyle="panel">

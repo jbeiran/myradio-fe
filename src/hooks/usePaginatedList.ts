@@ -15,7 +15,7 @@ type Filters = Record<string, string | number | undefined | null>;
 export function usePaginatedList<T>(
   resource: string,
   {
-    limit = 5,
+    limit = 4,
     initialFilters = {} as Filters,
   }: { limit?: number; initialFilters?: Filters } = {}
 ) {
