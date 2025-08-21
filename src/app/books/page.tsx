@@ -1,74 +1,21 @@
 "use client";
 
 import { MainTemplate } from "@/templates/MainTemplate";
-import { useEffect, useMemo, useState } from "react";
 import {
   Box,
-  Button,
   Heading,
-  HStack,
+  Text,
   SimpleGrid,
   Spinner,
-  Text,
+  HStack,
 } from "@chakra-ui/react";
 import { BookCard, type BookItem } from "@/components/BookCard";
-import { useRouter, useSearchParams } from "next/navigation";
-
-type ListResponse = {
-  page: number;
-  limit: number;
-  total: number;
-  items: BookItem[];
-};
+import { Pagination } from "@/components/Pagination";
+import { usePaginatedList } from "@/hooks/usePaginatedList";
 
 export default function BooksListPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const initialPage = Math.max(1, Number(searchParams?.get("page")) || 1);
-  const [page, setPage] = useState<number>(initialPage);
-  const [data, setData] = useState<ListResponse | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
-
-  const limit = 5;
-
-  const totalPages = useMemo(
-    () => (data ? Math.max(1, Math.ceil(data.total / data.limit)) : 1),
-    [data]
-  );
-
-  useEffect(() => {
-    const controller = new AbortController();
-    async function load() {
-      setLoading(true);
-      setError("");
-      try {
-        const res = await fetch(`/api/books?page=${page}&limit=${limit}`, {
-          signal: controller.signal,
-          cache: "no-store",
-        });
-        if (!res.ok) throw new Error("Error al cargar libros");
-        const json = (await res.json()) as ListResponse;
-        setData(json);
-      } catch (e: any) {
-        if (e.name !== "AbortError")
-          setError(e?.message || "Error desconocido");
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
-    const sp = new URLSearchParams(Array.from(searchParams?.entries() || []));
-    sp.set("page", String(page));
-    router.replace(`/books?${sp.toString()}`);
-    return () => controller.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
-
-  const goTo = (p: number) => {
-    if (p < 1 || (data && p > totalPages)) return;
-    setPage(p);
-  };
+  const { items, loading, error, page, totalPages, goTo } =
+    usePaginatedList<BookItem>("books", { limit: 5 });
 
   return (
     <MainTemplate>
@@ -92,54 +39,22 @@ export default function BooksListPage() {
             <Text>Cargando…</Text>
           </HStack>
         )}
+
         {!loading && error && (
           <Box textAlign="center" color="red.600" py={6}>
             {error}
           </Box>
         )}
 
-        {!loading && !error && data && (
+        {!loading && !error && (
           <>
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-              {data.items.map((it) => (
+              {items.map((it) => (
                 <BookCard key={it._id} item={it} />
               ))}
             </SimpleGrid>
 
-            <HStack mt={8} justify="center" spacing={2} wrap="wrap">
-              <Button
-                variant="outline"
-                onClick={() => goTo(page - 1)}
-                isDisabled={page <= 1}
-              >
-                ← Anterior
-              </Button>
-
-              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                let start = Math.max(1, page - 2);
-                let end = Math.min(totalPages, start + 4);
-                start = Math.max(1, end - 4);
-                const p = start + i;
-                return (
-                  <Button
-                    key={p}
-                    variant={p === page ? "solid" : "outline"}
-                    colorScheme={p === page ? "pink" : undefined}
-                    onClick={() => goTo(p)}
-                  >
-                    {p}
-                  </Button>
-                );
-              })}
-
-              <Button
-                variant="outline"
-                onClick={() => goTo(page + 1)}
-                isDisabled={data && page >= totalPages}
-              >
-                Siguiente →
-              </Button>
-            </HStack>
+            <Pagination page={page} totalPages={totalPages} onChange={goTo} />
           </>
         )}
       </Box>

@@ -25,7 +25,8 @@ import {
   ModalFooter,
 } from "@chakra-ui/react";
 import IconRating from "@/pages-components/Admin/IconRating";
-import { useSession } from "next-auth/react";
+import { useDetailResource } from "@/hooks/useDetailResource";
+import { formatDate } from "@/lib/date";
 
 type MovieDetail = {
   _id: string;
@@ -38,25 +39,18 @@ type MovieDetail = {
   createdAt?: string | null;
 };
 
-function formatDate(input?: string | null) {
-  if (!input) return "";
-  const d = new Date(input);
-  if (Number.isNaN(d.getTime())) return "";
-  return new Intl.DateTimeFormat("es-ES", {
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
-  }).format(d);
-}
-
 export default function MovieDetailPage() {
   const { movieId } = useParams<{ movieId: string }>()!;
   const router = useRouter();
-  const { data: session } = useSession();
-  const isAdmin = (session?.user as any)?.role === "admin";
-  const [item, setItem] = useState<MovieDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+
+  const {
+    item,
+    loading,
+    error,
+    isAdmin,
+    remove: removeItem,
+    save,
+  } = useDetailResource<MovieDetail>("movies", movieId);
 
   const editModal = useDisclosure();
   const [title, setTitle] = useState("");
@@ -65,30 +59,6 @@ export default function MovieDetailPage() {
   const [gender, setGender] = useState("");
   const [date, setDate] = useState("");
   const [rating, setRating] = useState(1);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    async function load() {
-      setLoading(true);
-      setError("");
-      try {
-        const res = await fetch(`/api/movies/${movieId}`, {
-          signal: controller.signal,
-          cache: "no-store",
-        });
-        if (!res.ok) throw new Error("No se pudo cargar la película");
-        const json = await res.json();
-        setItem(json.item);
-      } catch (e: any) {
-        if (e.name !== "AbortError")
-          setError(e?.message || "Error desconocido");
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
-    return () => controller.abort();
-  }, [movieId]);
 
   useEffect(() => {
     if (item) {
@@ -104,8 +74,8 @@ export default function MovieDetailPage() {
   const handleDelete = async () => {
     if (!isAdmin || !item) return;
     if (!confirm("¿Eliminar esta entrada?")) return;
-    const res = await fetch(`/api/movies/${item._id}`, { method: "DELETE" });
-    if (res.ok) {
+    const ok = await removeItem();
+    if (ok) {
       router.push("/movies");
     } else {
       alert("No se pudo eliminar");
@@ -122,21 +92,8 @@ export default function MovieDetailPage() {
       date,
       rating,
     };
-    const res = await fetch(`/api/movies/${item._id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    if (res.ok) {
-      setItem({
-        ...item,
-        title: payload.title,
-        director: payload.director,
-        review: payload.review,
-        gender: payload.gender,
-        date: payload.date || null,
-        rating: payload.rating,
-      });
+    const ok = await save(payload);
+    if (ok) {
       editModal.onClose();
     } else {
       alert("No se pudo guardar");

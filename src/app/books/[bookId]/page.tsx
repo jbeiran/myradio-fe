@@ -25,7 +25,8 @@ import {
   ModalFooter,
 } from "@chakra-ui/react";
 import IconRating from "@/pages-components/Admin/IconRating";
-import { useSession } from "next-auth/react";
+import { formatDate } from "@/lib/date";
+import { useDetailResource } from "@/hooks/useDetailResource";
 
 type BookDetail = {
   _id: string;
@@ -38,25 +39,18 @@ type BookDetail = {
   createdAt?: string | null;
 };
 
-function formatDate(input?: string | null) {
-  if (!input) return "";
-  const d = new Date(input);
-  if (Number.isNaN(d.getTime())) return "";
-  return new Intl.DateTimeFormat("es-ES", {
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
-  }).format(d);
-}
-
 export default function BookDetailPage() {
   const { bookId } = useParams<{ bookId: string }>()!;
   const router = useRouter();
-  const { data: session } = useSession();
-  const isAdmin = (session?.user as any)?.role === "admin";
-  const [item, setItem] = useState<BookDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+
+  const {
+    item,
+    loading,
+    error,
+    isAdmin,
+    remove: removeItem,
+    save,
+  } = useDetailResource<BookDetail>("books", bookId);
 
   const editModal = useDisclosure();
   const [title, setTitle] = useState("");
@@ -65,30 +59,6 @@ export default function BookDetailPage() {
   const [gender, setGender] = useState("");
   const [date, setDate] = useState("");
   const [rating, setRating] = useState(1);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    async function load() {
-      setLoading(true);
-      setError("");
-      try {
-        const res = await fetch(`/api/books/${bookId}`, {
-          signal: controller.signal,
-          cache: "no-store",
-        });
-        if (!res.ok) throw new Error("No se pudo cargar el libro");
-        const json = await res.json();
-        setItem(json.item);
-      } catch (e: any) {
-        if (e.name !== "AbortError")
-          setError(e?.message || "Error desconocido");
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
-    return () => controller.abort();
-  }, [bookId]);
 
   useEffect(() => {
     if (item) {
@@ -104,8 +74,8 @@ export default function BookDetailPage() {
   const handleDelete = async () => {
     if (!isAdmin || !item) return;
     if (!confirm("¿Eliminar esta entrada?")) return;
-    const res = await fetch(`/api/books/${item._id}`, { method: "DELETE" });
-    if (res.ok) {
+    const ok = await removeItem();
+    if (ok) {
       router.push("/books");
     } else {
       alert("No se pudo eliminar");
@@ -122,21 +92,8 @@ export default function BookDetailPage() {
       date,
       rating,
     };
-    const res = await fetch(`/api/books/${item._id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    if (res.ok) {
-      setItem({
-        ...item,
-        title: payload.title,
-        author: payload.author,
-        review: payload.review,
-        gender: payload.gender,
-        date: payload.date || null,
-        rating: payload.rating,
-      });
+    const ok = await save(payload);
+    if (ok) {
       editModal.onClose();
     } else {
       alert("No se pudo guardar");

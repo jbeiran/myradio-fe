@@ -24,7 +24,8 @@ import {
   Input,
   Textarea,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
+import { useDetailResource } from "@/hooks/useDetailResource";
+import { formatDate } from "@/lib/date";
 
 type DiaryDetail = {
   _id: string;
@@ -35,55 +36,24 @@ type DiaryDetail = {
   createdAt?: string | null;
 };
 
-function formatDate(input?: string | null) {
-  if (!input) return "";
-  const d = new Date(input);
-  if (Number.isNaN(d.getTime())) return "";
-  return new Intl.DateTimeFormat("es-ES", {
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
-  }).format(d);
-}
-
 export default function DiaryDetailPage() {
   const { diaryId } = useParams<{ diaryId: string }>()!;
   const router = useRouter();
-  const { data: session } = useSession();
-  const isAdmin = (session?.user as any)?.role === "admin";
-  const [item, setItem] = useState<DiaryDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+
+  const {
+    item,
+    loading,
+    error,
+    isAdmin,
+    remove: removeItem,
+    save,
+  } = useDetailResource<DiaryDetail>("diary", diaryId);
 
   const editModal = useDisclosure();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState("");
   const [date, setDate] = useState("");
-
-  useEffect(() => {
-    const controller = new AbortController();
-    async function load() {
-      setLoading(true);
-      setError("");
-      try {
-        const res = await fetch(`/api/diary/${diaryId}`, {
-          signal: controller.signal,
-          cache: "no-store",
-        });
-        if (!res.ok) throw new Error("No se pudo cargar la entrada");
-        const json = await res.json();
-        setItem(json.item);
-      } catch (e: any) {
-        if (e.name !== "AbortError")
-          setError(e?.message || "Error desconocido");
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
-    return () => controller.abort();
-  }, [diaryId]);
 
   useEffect(() => {
     if (item) {
@@ -97,8 +67,8 @@ export default function DiaryDetailPage() {
   const handleDelete = async () => {
     if (!isAdmin || !item) return;
     if (!confirm("¿Eliminar esta entrada?")) return;
-    const res = await fetch(`/api/diary/${item._id}`, { method: "DELETE" });
-    if (res.ok) {
+    const ok = await removeItem();
+    if (ok) {
       router.push("/diary");
     } else {
       alert("No se pudo eliminar");
@@ -113,19 +83,8 @@ export default function DiaryDetailPage() {
       tags: tags.trim(),
       date,
     };
-    const res = await fetch(`/api/diary/${item._id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    if (res.ok) {
-      setItem({
-        ...item,
-        title: payload.title,
-        content: payload.content,
-        tags: payload.tags,
-        date: payload.date || null,
-      });
+    const ok = await save(payload);
+    if (ok) {
       editModal.onClose();
     } else {
       alert("No se pudo guardar");
