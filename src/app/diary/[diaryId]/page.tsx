@@ -65,7 +65,7 @@ export default function DiaryDetailPage() {
   return (
     <MainTemplate>
       <Box layerStyle="panel">
-        <Button variant="outline" mb={4} onClick={() => router.push("/diary")}>
+        <Button variant="outline" mb={10} onClick={() => router.push("/diary")}>
           ← Volver al diario
         </Button>
 
@@ -75,6 +75,7 @@ export default function DiaryDetailPage() {
         {!loading && !error && item && (
           <>
             <Heading
+              mb={5}
               size="2xl"
               color="brand.evergreen"
               textShadow="1px 1px 3px rgba(168,110,61,0.3)"
