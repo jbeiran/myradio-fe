@@ -14,7 +14,7 @@ export async function GET(_req: Request, ctx: { params: { id: string } }) {
   }
 
   const db = await getDb();
-  const coll = db.collection(process.env.COLLECTION_DIARY!);
+  const coll = db.collection(process.env.COLLECTION_DIARY || "diary");
 
   const doc = await coll.findOne(
     { _id: new ObjectId(id) },
@@ -60,7 +60,7 @@ export async function PATCH(req: Request, ctx: { params: { id: string } }) {
   }
 
   const db = await getDb();
-  const coll = db.collection(process.env.COLLECTION_DIARY!);
+  const coll = db.collection(process.env.COLLECTION_DIARY || "diary");
   const res = await coll.updateOne(
     { _id: new ObjectId(id) },
     { $set: { ...update } }
@@ -85,7 +85,7 @@ export async function DELETE(_req: Request, ctx: { params: { id: string } }) {
   }
 
   const db = await getDb();
-  const coll = db.collection(process.env.COLLECTION_DIARY!);
+  const coll = db.collection(process.env.COLLECTION_DIARY || "diary");
   const res = await coll.deleteOne({ _id: new ObjectId(id) });
 
   if (res.deletedCount === 0) {

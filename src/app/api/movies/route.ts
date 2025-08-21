@@ -46,7 +46,7 @@ export async function GET(req: Request) {
   }
 
   const db = await getDb();
-  const coll = db.collection(process.env.COLLECTION_MOVIES!);
+  const coll = db.collection(process.env.COLLECTION_MOVIES || "movies");
 
   const total = await coll.countDocuments(filter);
   const itemsRaw = await coll
@@ -99,15 +99,17 @@ export async function POST(req: Request) {
   }
 
   const db = await getDb();
-  const result = await db.collection(process.env.COLLECTION_MOVIES!).insertOne({
-    title,
-    director,
-    rating,
-    review,
-    date,
-    gender,
-    createdAt: new Date(),
-  });
+  const result = await db
+    .collection(process.env.COLLECTION_MOVIES || "movies")
+    .insertOne({
+      title,
+      director,
+      rating,
+      review,
+      date,
+      gender,
+      createdAt: new Date(),
+    });
 
   return NextResponse.json(
     { insertedId: String(result.insertedId) },
