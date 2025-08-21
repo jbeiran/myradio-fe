@@ -1,10 +1,9 @@
-import HomePage from "@/pages-components/Home";
 import { MainTemplate } from "@/templates/MainTemplate";
 
-export default function Home() {
+export default function GalleryPage() {
   return (
     <MainTemplate>
-      <HomePage />
+      <div>Gallery</div>
     </MainTemplate>
   );
 }
