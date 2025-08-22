@@ -27,7 +27,7 @@ function DiaryList() {
     goTo,
     filters,
     applyFilters,
-  } = usePaginatedList<DiaryItem>("diary", { limit: 5 });
+  } = usePaginatedList<DiaryItem>("diary", { limit: 4 });
 
   return (
     <Box layerStyle="panel">
@@ -41,7 +41,7 @@ function DiaryList() {
         Diario
       </Heading>
       <Text textAlign="center" color="brand.slateGray" mb={6}>
-        Notas, pensamientos y lecturas, con aroma otoñal
+        People are particularly stupid today; I can't talk to any more of them.
       </Text>
 
       <FilterBar
@@ -87,8 +87,8 @@ function DiaryList() {
       {!loading && !error && (
         <>
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-            {items.map((it) => (
-              <DiaryCard key={it._id} item={it} />
+            {items.map((it, idx) => (
+              <DiaryCard key={it._id} item={it} paperIndex={idx % 4} />
             ))}
           </SimpleGrid>
 

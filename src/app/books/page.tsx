@@ -27,7 +27,7 @@ function BooksList() {
     goTo,
     filters,
     applyFilters,
-  } = usePaginatedList<BookItem>("books", { limit: 5 });
+  } = usePaginatedList<BookItem>("books", { limit: 4 });
 
   return (
     <Box layerStyle="panel">
