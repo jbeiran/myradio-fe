@@ -20,6 +20,7 @@ import {
 import { Suspense, useState } from "react";
 import { usePaginatedList } from "@/hooks/usePaginatedList";
 import { Pagination } from "@/components/Pagination";
+import { PhotoCard } from "@/components/PhotoCard";
 
 type GalleryItem = {
   _id: string;
@@ -74,35 +75,20 @@ function GalleryList() {
 
       {!loading && !error && (
         <>
-          <SimpleGrid columns={{ base: 2, md: 4 }} spacing={3}>
+          <SimpleGrid
+            minChildWidth={{ base: "300px", md: "360px" }}
+            spacing={{ base: 5, md: 7 }}
+            justifyItems="center"
+          >
             {items.map((it) => (
-              <Box
+              <PhotoCard
                 key={it._id}
-                borderWidth="1px"
-                borderColor="brand.evergreen"
-                borderRadius="md"
-                overflow="hidden"
-                bg="whiteAlpha.900"
-                cursor="zoom-in"
-                role="button"
-                tabIndex={0}
-                onClick={() => openItem(it)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") openItem(it);
-                }}
-              >
-                <Image
-                  src={it.url}
-                  alt={it.title || it.alt || "Foto"}
-                  w="100%"
-                  h="160px"
-                  objectFit="cover"
-                  loading="lazy"
-                />
-              </Box>
+                src={it.url}
+                alt={it.title || it.alt || "Foto"}
+                onOpen={() => openItem(it)}
+              />
             ))}
           </SimpleGrid>
-
           <Pagination page={page} totalPages={totalPages} onChange={goTo} />
         </>
       )}
