@@ -40,8 +40,16 @@ function BooksList() {
       >
         Libros
       </Heading>
-      <Text textAlign="center" color="brand.slateGray" mb={6}>
-        Lista de libros leídos, con valoración
+      <Text
+        textAlign="center"
+        color="brand.slateGray"
+        fontStyle="italic"
+        fontSize="1.2em"
+        fontWeight="bold"
+        mb={6}
+      >
+        Quizá la razón por la que no habías encontrado tu lugar en el mundo es
+        porque tenías que construirlo tú.
       </Text>
 
       <FilterBar

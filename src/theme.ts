@@ -194,7 +194,7 @@ export const theme = extendTheme({
       py: { base: 3, md: 4 },
     },
     panel: {
-      bg: "whiteAlpha.900",
+      bg: "rgba(255, 255, 255, 0.47)",
       border: "1px solid",
       borderColor: "brand.evergreen",
       boxShadow: "0 6px 14px rgba(47,93,58,0.18)",
