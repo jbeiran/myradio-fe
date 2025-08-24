@@ -110,7 +110,7 @@ export default function MovieDetailPage() {
 
             <Box mt={4} pointerEvents="none">
               <IconRating
-                value={Math.max(1, Math.min(5, item.rating || 1))}
+                value={Math.max(0, Math.min(5, item.rating ?? 0))}
                 onChange={() => {}}
                 variant="star"
               />
@@ -140,7 +140,7 @@ export default function MovieDetailPage() {
           date: item?.date
             ? new Date(item.date).toISOString().slice(0, 10)
             : "",
-          rating: Math.max(1, Math.min(5, item?.rating || 1)),
+          rating: Math.max(0, Math.min(5, item?.rating ?? 0)),
         }}
         fields={[
           { name: "title", label: "Título", type: "text" },

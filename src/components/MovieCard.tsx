@@ -79,7 +79,7 @@ export function MovieCard({ item }: { item: MovieItem }) {
 
       <Box mt={3} pointerEvents="none">
         <IconRating
-          value={Math.max(1, Math.min(5, item.rating || 1))}
+          value={Math.max(0, Math.min(5, item.rating ?? 0))}
           onChange={() => {}}
           variant="star"
         />

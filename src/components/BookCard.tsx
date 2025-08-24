@@ -77,7 +77,7 @@ export function BookCard({ item }: { item: BookItem }) {
 
       <Box mt={3} pointerEvents="none">
         <IconRating
-          value={Math.max(1, Math.min(5, item.rating || 1))}
+          value={Math.max(0, Math.min(5, item.rating ?? 0))}
           onChange={() => {}}
           variant="book"
         />
