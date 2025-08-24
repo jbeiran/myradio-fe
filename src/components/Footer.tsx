@@ -5,7 +5,7 @@ export default function Footer() {
     <Box as="footer" layerStyle="footer">
       <Container>
         <Text variant="subtitle">
-          &copy; 2025 My 2000s World | Glitter & Pink Vibes
+          &copy; 2025 La Radio de Saki | My 2000s Radio
         </Text>
       </Container>
     </Box>
