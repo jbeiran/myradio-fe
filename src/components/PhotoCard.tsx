@@ -16,10 +16,12 @@ export const PhotoCard = ({ src, alt, onOpen }: Props) => {
   };
 
   const FRAME_AREA = {
-    width: "70%",
-    height: "75%",
-    topOffset: "55%",
+    width: "68%",
+    height: "73%",
+    topOffset: "54%",
   };
+
+  const randomRotation = Math.random() * 4 - 2;
 
   return (
     <Box
@@ -30,8 +32,11 @@ export const PhotoCard = ({ src, alt, onOpen }: Props) => {
       cursor="zoom-in"
       _focusVisible={{ boxShadow: "outline" }}
       transition="transform .18s ease"
-      _hover={{ transform: "translateY(-2px)" }}
+      _hover={{
+        transform: `translateY(-4px) rotate(${randomRotation}deg) scale(1.02)`,
+      }}
       w="100%"
+      transform={`rotate(${randomRotation * 0.3}deg)`}
     >
       <AspectRatio
         ratio={768 / 993}
@@ -56,8 +61,7 @@ export const PhotoCard = ({ src, alt, onOpen }: Props) => {
             display="flex"
             alignItems="center"
             justifyContent="center"
-            bg="rgba(250, 250, 250, 0.43)"
-            borderRadius="8px"
+            boxShadow="inset 0 2px 4px rgba(0,0,0,0.1)"
           >
             <Image
               src={src}
@@ -66,11 +70,11 @@ export const PhotoCard = ({ src, alt, onOpen }: Props) => {
               h="100%"
               objectFit="contain"
               objectPosition="center"
-              borderRadius="6px"
-              boxShadow="0 2px 8px rgba(0,0,0,0.15)"
+              borderRadius="5px"
               loading="lazy"
               draggable={false}
               transition="opacity 0.3s ease"
+              filter="brightness(0.98) contrast(1.05) saturate(0.95)"
             />
           </Box>
         </Box>
