@@ -141,7 +141,7 @@ const textareaTheme = defineStyleConfig({
 const tabsTheme = defineStyleConfig({
   defaultProps: {
     variant: "enclosed",
-    colorScheme: "pink",
+    colorScheme: "green",
   },
 });
 

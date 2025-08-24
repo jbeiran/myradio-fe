@@ -102,7 +102,7 @@ export default function MovieDetailPage() {
                 {formatDate(item.date || item.createdAt)}
               </Text>
               {item.gender ? (
-                <Badge colorScheme="pink" variant="solid">
+                <Badge colorScheme="green" variant="solid">
                   {item.gender}
                 </Badge>
               ) : null}

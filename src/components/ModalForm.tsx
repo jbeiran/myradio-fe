@@ -168,7 +168,7 @@ export default function ModalForm<T extends Record<string, any>>({
                   {cancelLabel}
                 </Button>
                 <Button
-                  colorScheme="pink"
+                  colorScheme="green"
                   type="submit"
                   isLoading={isSubmitting}
                 >

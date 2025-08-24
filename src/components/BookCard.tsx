@@ -55,7 +55,7 @@ export function BookCard({ item }: { item: BookItem }) {
           {dateLabel}
         </Text>
         {item.gender ? (
-          <Badge colorScheme="pink" variant="solid">
+          <Badge colorScheme="green" variant="solid">
             {item.gender}
           </Badge>
         ) : null}

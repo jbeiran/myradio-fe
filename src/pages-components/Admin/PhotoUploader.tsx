@@ -95,7 +95,7 @@ export default function PhotoUploader() {
       )}
 
       <HStack>
-        <Button colorScheme="pink" onClick={handleSubmit}>
+        <Button colorScheme="green" onClick={handleSubmit}>
           Subir
         </Button>
         <Button

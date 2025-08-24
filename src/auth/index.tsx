@@ -120,7 +120,7 @@ export default function SignIn() {
                 )}
               </Field>
 
-              <Button type="submit" colorScheme="pink" isLoading={isSubmitting}>
+              <Button type="submit" colorScheme="green" isLoading={isSubmitting}>
                 Entrar
               </Button>
             </VStack>
