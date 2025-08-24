@@ -29,7 +29,7 @@ export function Pagination({ page, totalPages, onChange }: Props) {
           <Button
             key={p}
             variant={p === page ? "solid" : "outline"}
-            colorScheme={p === page ? "pink" : undefined}
+            colorScheme={p === page ? "green" : undefined}
             onClick={() => onChange(p)}
           >
             {p}

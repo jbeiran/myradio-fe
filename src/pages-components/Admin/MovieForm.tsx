@@ -135,7 +135,7 @@ export default function MovieForm() {
 
             <Button
               type="submit"
-              colorScheme="pink"
+              colorScheme="green"
               isLoading={isSubmitting}
               alignSelf={{ base: "stretch", md: "flex-end" }}
             >

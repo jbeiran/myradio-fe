@@ -94,7 +94,7 @@ export async function POST(req: Request) {
     date = null,
     gender = "",
   } = await req.json();
-  if (!title || !author || !rating || !review) {
+  if (!title || !author || !review) {
     return NextResponse.json({ error: "Faltan campos" }, { status: 400 });
   }
 

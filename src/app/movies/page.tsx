@@ -40,8 +40,16 @@ function MoviesList() {
       >
         Películas
       </Heading>
-      <Text textAlign="center" color="brand.slateGray" mb={6}>
-        Lista de películas vistas, con valoración
+      <Text
+        textAlign="center"
+        color="brand.slateGray"
+        fontStyle="italic"
+        fontSize="1.2em"
+        fontWeight="bold"
+        mb={6}
+      >
+        Do you ever get the feeling people are incapable of not caring? People
+        are amazing.
       </Text>
 
       <FilterBar

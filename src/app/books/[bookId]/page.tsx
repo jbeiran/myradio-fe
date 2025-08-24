@@ -101,7 +101,7 @@ export default function BookDetailPage() {
                 {formatDate(item.date || item.createdAt)}
               </Text>
               {item.gender ? (
-                <Badge colorScheme="pink" variant="solid">
+                <Badge colorScheme="green" variant="solid">
                   {item.gender}
                 </Badge>
               ) : null}
@@ -109,7 +109,7 @@ export default function BookDetailPage() {
 
             <Box mt={4} pointerEvents="none">
               <IconRating
-                value={Math.max(1, Math.min(5, item.rating || 1))}
+                value={Math.max(0, Math.min(5, item.rating ?? 0))}
                 onChange={() => {}}
                 variant="book"
               />
@@ -139,7 +139,7 @@ export default function BookDetailPage() {
           date: item?.date
             ? new Date(item.date).toISOString().slice(0, 10)
             : "",
-          rating: Math.max(1, Math.min(5, item?.rating || 1)),
+          rating: Math.max(0, Math.min(5, item?.rating ?? 0)),
         }}
         fields={[
           { name: "title", label: "Título", type: "text" },

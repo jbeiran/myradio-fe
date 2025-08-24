@@ -100,7 +100,7 @@ export default function ModalForm<T extends Record<string, any>>({
                           <FormLabel>{f.label}</FormLabel>
                           <IconRating
                             variant={f.variant || "star"}
-                            value={Number((values as any)[f.name] || 1)}
+                            value={Number((values as any)[f.name] ?? 0)}
                             onChange={(n: number) => setFieldValue(f.name, n)}
                           />
                           <FormErrorMessage>{err as any}</FormErrorMessage>
@@ -168,7 +168,7 @@ export default function ModalForm<T extends Record<string, any>>({
                   {cancelLabel}
                 </Button>
                 <Button
-                  colorScheme="pink"
+                  colorScheme="green"
                   type="submit"
                   isLoading={isSubmitting}
                 >

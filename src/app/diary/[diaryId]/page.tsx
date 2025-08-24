@@ -100,7 +100,7 @@ export default function DiaryDetailPage() {
 
             <HStack mt={3} spacing={2} flexWrap="wrap">
               {tagsArr.map((t) => (
-                <Badge key={t} colorScheme="pink" variant="solid">
+                <Badge key={t} colorScheme="green" variant="solid">
                   #{t}
                 </Badge>
               ))}

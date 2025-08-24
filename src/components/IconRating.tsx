@@ -72,7 +72,7 @@ export default function IconRating({
 
   const handleKey = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowRight") onChange(Math.min(5, value + 1));
-    if (e.key === "ArrowLeft") onChange(Math.max(1, value - 1));
+    if (e.key === "ArrowLeft") onChange(Math.max(0, value - 1));
   };
 
   const labelUnit = variant === "book" ? "libro" : "estrella";
@@ -108,7 +108,7 @@ export default function IconRating({
             isRound
             size="sm"
             fontSize={variant === "book" ? "2xl" : "xl"}
-            tabIndex={n === value ? 0 : -1}
+            tabIndex={n === (value || 1) ? 0 : -1}
             color={active ? "brand.mustardVintage" : "gray.500"}
             _hover={{ color: "brand.mustardVintage", transform: "scale(1.08)" }}
             _active={{ transform: "scale(0.98)" }}
@@ -117,7 +117,7 @@ export default function IconRating({
               outlineColor: "brand.evergreen",
               outlineOffset: "2px",
             }}
-            onClick={() => onChange(n)}
+            onClick={() => onChange(n === value ? 0 : n)}
           />
         );
       })}

@@ -40,7 +40,7 @@ function DiaryList() {
       >
         Diario
       </Heading>
-      <Text textAlign="center" color="brand.slateGray" mb={6}>
+      <Text textAlign="center" color="brand.slateGray" fontStyle="italic" fontSize="1.2em" fontWeight="bold" mb={6}>
         People are particularly stupid today; I can't talk to any more of them.
       </Text>
 

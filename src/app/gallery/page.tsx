@@ -104,8 +104,15 @@ function GalleryList() {
       >
         Galería
       </Heading>
-      <Text textAlign="center" color="brand.slateGray" mb={6}>
-        Fotos subidas
+      <Text
+        textAlign="center"
+        color="brand.slateGray"
+        fontStyle="italic"
+        fontSize="1.2em"
+        fontWeight="bold"
+        mb={6}
+      >
+        People can live a hundred years without really living for a minute.
       </Text>
 
       {loading && (
