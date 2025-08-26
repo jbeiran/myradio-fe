@@ -13,6 +13,8 @@ export const PhotoCard = ({ src, alt, onOpen }: Props) => {
     <Box
       role="button"
       tabIndex={0}
+      aria-label={alt}
+      title={alt}
       onClick={onOpen}
       cursor="zoom-in"
       _focusVisible={{ boxShadow: "outline" }}

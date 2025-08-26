@@ -147,13 +147,16 @@ function GalleryList() {
                 position="relative"
                 w="100%"
                 maxW={{ base: "380px", md: "560px" }}
+                role="group"
               >
                 {isAdmin && (
                   <IconButton
                     aria-label="Eliminar"
                     icon={<DeleteIcon />}
                     size="sm"
-                    colorScheme="green"
+                    variant="ghost"
+                    color="brand.evergreen"
+                    bg="whiteAlpha.800"
                     position="absolute"
                     top="2"
                     right="2"
