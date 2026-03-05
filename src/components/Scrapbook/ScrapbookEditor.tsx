@@ -47,6 +47,8 @@ export default function ScrapbookEditor() {
     exportToPng,
   } = useScrapbook();
 
+  const selectedElement = elements.find((el) => el.id === selectedId) ?? null;
+
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const [stageDims, setStageDims] = useState({
     w: MAX_W,
@@ -143,6 +145,7 @@ export default function ScrapbookEditor() {
         >
           <Toolbar
             selectedId={selectedId}
+            selectedElement={selectedElement}
             isLoggedIn={isLoggedIn}
             onAddImage={addImage}
             onAddText={() => addText()}
@@ -151,6 +154,9 @@ export default function ScrapbookEditor() {
             onBringToFront={bringToFront}
             onSendToBack={sendToBack}
             onExport={exportToPng}
+            onChangeTextColor={(color) =>
+              selectedId && updateElement(selectedId, { fill: color })
+            }
           />
         </Box>
 
