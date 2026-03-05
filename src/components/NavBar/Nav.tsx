@@ -20,6 +20,7 @@ const links = [
   { href: "/gallery", label: "Fotitos" },
   { href: "/books", label: "Libros" },
   { href: "/movies", label: "Pelis" },
+  { href: "/scrapbook", label: "Scrapbook" },
 ];
 
 export default function Nav() {

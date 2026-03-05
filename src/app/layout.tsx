@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Princess_Sofia, EB_Garamond } from "next/font/google";
+import { Princess_Sofia, EB_Garamond, Dancing_Script } from "next/font/google";
 import localFont from "next/font/local";
 import { Providers } from "./providers";
 
@@ -24,6 +24,13 @@ const cutie = localFont({
   display: "swap",
 });
 
+const dancingScript = Dancing_Script({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-dancing",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Saki's Pink World - 2000s Vibes",
   description:
@@ -38,7 +45,7 @@ export default async function RootLayout({
   return (
     <html
       lang="es"
-      className={`${princess.variable} ${garamond.variable} ${cutie.variable}`}
+      className={`${princess.variable} ${garamond.variable} ${cutie.variable} ${dancingScript.variable}`}
     >
       <body suppressHydrationWarning={true}>
         <Providers>{children}</Providers>
